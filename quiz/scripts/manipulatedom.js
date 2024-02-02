@@ -10,10 +10,14 @@ function createTRNode(colNodes) {
   return trNode;
 }
 
-function createTDNode(childNode) {
-  let tdNode = document.createElement("td");
-  tdNode.appendChild(childNode);
-  return tdNode;
+function createTDNode(childNode, id='') {
+    let tdNode = document.createElement("td");
+  
+    tdNode.appendChild(childNode);
+    tdNode.classList.add('tdnode');
+    tdNode.id = id;
+
+    return tdNode;
 }
 
 function createTxtNode(txt) {
@@ -21,11 +25,31 @@ function createTxtNode(txt) {
   return txtNode;
 }
 
+function createBtnNode(btnText, event, fun) {
+    let btnNode = document.createElement('button');
+    let btnNodeText = document.createTextNode(btnText);
+    btnNode.appendChild(btnNodeText);
+    btnNode.addEventListener(event, fun); 
+    return btnNode;
+}
+
+
+function edit(node) {
+    let newNode = document.createElement('input');
+    newNode.type = "text";
+    newNode.placeholder = 'Ender Cell (x,y) ...';
+    node.replaceChild(newNode, node.childNodes[0]);
+}
+
 function addTable() {
   const tableNode = document.createElement("table");
   for(let i = 0; i < 3; i++) {
-    let col1 = createTDNode(createTxtNode("Cell (" + i + ", 0)"));
-    tableNode.appendChild(createTRNode([col1]));
+      let col1 = createTDNode(createTxtNode("Cell (" + i + ", 0)"), 'col - $(i)');
+   
+      let col2 = createTDNode(createBtnNode('Edit Text', "click", function()
+					    {edit(col1)}
+					   ));
+      tableNode.appendChild(createTRNode([col1, col2]));
   }
   document.getElementById("root").appendChild(tableNode);
 }
